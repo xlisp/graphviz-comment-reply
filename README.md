@@ -174,6 +174,36 @@ A: 直接复制 `~/Library/Application Support/com.chanshunli.thoughtgraph/thoug
 
 ---
 
-## 8. License
+## 8. MCP server（图记忆中心）
+
+`mcp-server/` 是一个独立的 Rust 二进制，把同一个 SQLite 数据库暴露为
+**Model Context Protocol** server，让 Claude Desktop 当作长期记忆来用：
+
+- 跨会话读写 / 搜索图谱
+- 13 个工具：CRUD、`add_reference`（成环）、`search_nodes`（FTS5）、`find_paths`、`render_graph` 等
+- 与 GUI app **共享同一份 SQLite**（已开启 WAL，并发安全）
+- 自动维护 FTS5 全文索引（由触发器同步 `nodes` ↔ `nodes_fts`）
+
+编译并接入 Claude Desktop：
+
+```bash
+cargo build -p thoughtgraph-mcp --release
+```
+
+把可执行文件路径写进 `~/Library/Application Support/Claude/claude_desktop_config.json`：
+
+```json
+{
+  "mcpServers": {
+    "thoughtgraph": {
+      "command": "/Users/xlisp/RustPro/graphviz-comment-reply/target/release/thoughtgraph-mcp"
+    }
+  }
+}
+```
+
+详见 [`mcp-server/README.md`](./mcp-server/README.md)。
+
+## 9. License
 
 MIT
