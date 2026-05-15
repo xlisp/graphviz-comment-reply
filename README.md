@@ -1,4 +1,4 @@
-# ThoughtGraph · 思维图谱
+# ThoughtGraph · Agent Memory MCP server
 
 一个用 **Rust + Tauri 2 + SQLite** 写的 macOS 桌面应用，把"评论 / 回复"建模成有向图，
 并通过 **GraphViz** 渲染出来。
@@ -17,7 +17,7 @@
   *A → B → C ⟲ A*，可以一眼看出"我又绕回来了"。
 - **导出 `.gv` / 直接渲染** —— 一键导出 GraphViz 源文件，或调用 `dot`
   渲染成 PDF，再交给 `/Applications/Graphviz.app` 查看。
-- **思维路径搜索** —— 输入两个 `app_id`，用 BFS 找出所有最短路径，
+- **思维路径搜索** —— 输入两个 `关键字`，用 BFS 找出所有路径，
   把"从想法 A 到结论 B 是怎么走过来的"显式呈现。
 
 ---
