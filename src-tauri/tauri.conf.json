@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "ThoughtGraph",
+  "version": "0.1.0",
+  "identifier": "com.chanshunli.thoughtgraph",
+  "build": {
+    "frontendDist": "../src",
+    "devUrl": null
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "ThoughtGraph",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 900,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "Productivity",
+    "shortDescription": "A thinking tool: graphs of comments, replies, and cycles.",
+    "longDescription": "Create graphs of thoughts. Each node can be commented on and replied to. Reference existing node IDs to form cycles — perfect for recursive reasoning. Export GraphViz .gv files or render directly with dot."
+  },
+  "plugins": {}
+}
