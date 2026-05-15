@@ -746,8 +746,9 @@ $("#search-paths").onclick = async () => {
 
 function renderPathResults({ from, to, hits }) {
   const box = $("#path-results");
-  const header = `<div class="resolved-note">
-       <code>${escapeHtml(from.app_id)}</code> ⇄ <code>${escapeHtml(to.app_id)}</code>
+  const header = `<div class="resolved-note" style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+       <span><code>${escapeHtml(from.app_id)}</code> ⇄ <code>${escapeHtml(to.app_id)}</code></span>
+       ${hits.length ? `<button id="open-paths-gv" class="primary" style="padding:4px 8px; font-size:11px">📈 Open Graphviz</button>` : ""}
      </div>`;
   if (!hits.length) {
     box.innerHTML = header + `<p class="muted" style="padding:8px">No path found.</p>`;
@@ -773,6 +774,26 @@ function renderPathResults({ from, to, hits }) {
   for (const s of box.querySelectorAll(".step[data-node]")) {
     s.style.cursor = "pointer";
     s.onclick = () => scrollToNode(Number(s.dataset.node));
+  }
+
+  // Render the path subgraph (multi-color paths) via dot and open the PDF.
+  const openBtn = box.querySelector("#open-paths-gv");
+  if (openBtn) {
+    openBtn.onclick = async () => {
+      openBtn.disabled = true;
+      const origText = openBtn.textContent;
+      openBtn.textContent = "Rendering…";
+      try {
+        await invoke("render_paths_and_open", {
+          graphId: state.currentGraph.id,
+          fromAppId: from.app_id,
+          toAppId: to.app_id,
+          maxPaths: 10,
+          format: "pdf",
+        });
+      } catch (e) { alert(e); }
+      finally { openBtn.disabled = false; openBtn.textContent = origText; }
+    };
   }
 }
 

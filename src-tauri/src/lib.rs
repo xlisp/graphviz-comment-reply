@@ -42,6 +42,7 @@ pub fn run() {
             commands::open_in_graphviz_app,
             commands::find_paths,
             commands::search_nodes,
+            commands::render_paths_and_open,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

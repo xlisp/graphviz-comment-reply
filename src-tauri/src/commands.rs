@@ -209,6 +209,45 @@ pub fn find_paths(
 }
 
 #[tauri::command]
+pub fn render_paths_and_open(
+    app: tauri::AppHandle,
+    state: State<'_, DbState>,
+    graph_id: i64,
+    from_app_id: String,
+    to_app_id: String,
+    max_paths: Option<usize>,
+    format: Option<String>,
+) -> Result<RenderResult, String> {
+    let fmt = format.unwrap_or_else(|| "pdf".to_string());
+    let conn = state.conn.lock().map_err(err)?;
+    let g_name = conn
+        .query_row(
+            "SELECT name FROM graphs WHERE id = ?1",
+            [graph_id],
+            |r| r.get::<_, String>(0),
+        )
+        .map_err(err)?;
+    let paths = graph::find_paths(
+        &conn,
+        graph_id,
+        &from_app_id,
+        &to_app_id,
+        max_paths.unwrap_or(10),
+    )
+    .map_err(err)?;
+    if paths.is_empty() {
+        return Err("No paths to render — the two nodes are not connected.".into());
+    }
+    let dir = export_dir(&app)?;
+    let res = graph::render_paths_and_save(&paths, &g_name, &dir, &fmt).map_err(err)?;
+    std::process::Command::new("open")
+        .arg(&res.image_path)
+        .status()
+        .map_err(err)?;
+    Ok(res)
+}
+
+#[tauri::command]
 pub fn search_nodes(
     state: State<'_, DbState>,
     graph_id: Option<i64>,
