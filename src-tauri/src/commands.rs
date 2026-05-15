@@ -207,3 +207,14 @@ pub fn find_paths(
     )
     .map_err(err)
 }
+
+#[tauri::command]
+pub fn search_nodes(
+    state: State<'_, DbState>,
+    graph_id: Option<i64>,
+    query: String,
+    limit: Option<usize>,
+) -> Result<Vec<db::SearchHit>, String> {
+    let conn = state.conn.lock().map_err(err)?;
+    db::search_nodes(&conn, &query, graph_id, limit.unwrap_or(30)).map_err(err)
+}

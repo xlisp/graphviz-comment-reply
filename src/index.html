@@ -15,7 +15,7 @@
         </div>
         <ul id="graph-list" class="graph-list"></ul>
         <div class="sidebar-foot">
-          <small>Local data: <code>~/Library/Application Support/com.chanshunli.thoughtgraph</code></small>
+          <small>Data: <code>~/Library/Application Support/com.chanshunli.thoughtgraph</code></small>
         </div>
       </aside>
 
@@ -36,39 +36,31 @@
         </header>
 
         <section class="panes">
+          <!-- ===== NODES (unified tree with inline actions) ===== -->
           <div class="pane nodes-pane">
             <div class="pane-head">
               <h3>Nodes</h3>
-              <button id="new-root">+ New comment</button>
+              <button id="new-root" class="primary">+ New comment</button>
+            </div>
+            <div class="filter-row">
+              <input id="content-search" type="search" placeholder="Search content (space = AND)…" />
+              <span id="search-count" class="muted"></span>
             </div>
             <ul id="nodes-tree" class="tree"></ul>
           </div>
 
-          <div class="pane detail-pane">
-            <div class="pane-head">
-              <h3 id="detail-title">Detail</h3>
-              <div>
-                <button id="add-reply" disabled>↳ Reply</button>
-                <button id="add-ref" disabled title="Reference an existing app_id (creates a cycle edge)">⟲ Ref by app_id</button>
-                <button id="delete-node" class="danger" disabled>Delete</button>
-              </div>
-            </div>
-            <div id="detail-body" class="detail-body">
-              <p class="muted">Select a node to view and edit its content.</p>
-            </div>
-            <h4>Outgoing edges</h4>
-            <ul id="edges-list" class="edges"></ul>
-          </div>
-
+          <!-- ===== PATH SEARCH + DOT PREVIEW ===== -->
           <div class="pane search-pane">
-            <div class="pane-head">
-              <h3>Thinking path search</h3>
-            </div>
+            <div class="pane-head"><h3>Thinking path search</h3></div>
             <div class="search-form">
-              <label>From app_id <input id="from-id" placeholder="e.g. root" /></label>
-              <label>To app_id <input id="to-id" placeholder="e.g. conclusion" /></label>
-              <button id="search-paths">Find shortest paths</button>
+              <label>From <input id="from-id" placeholder="keyword or app_id" /></label>
+              <label>To <input id="to-id" placeholder="keyword or app_id" /></label>
+              <button id="search-paths" class="primary">Find</button>
             </div>
+            <p class="muted small">
+              Accepts either the exact <code>app_id</code> or a content keyword
+              (we'll pick the best match via full-text search).
+            </p>
             <div id="path-results" class="path-results"></div>
             <h4>DOT preview</h4>
             <pre id="dot-preview" class="dot"></pre>
